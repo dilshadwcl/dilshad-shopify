@@ -41,6 +41,11 @@
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  {%- assign personalization_poc_enabled = false -%}
+  {%- if product.id == 8434947915961 or product.handle == 'royal-kitchen-alphabet-mug-poc' -%}
+    {%- assign personalization_poc_enabled = true -%}
+    {{ 'personalization-poc.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
@@ -75,9 +80,38 @@
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <product-component view-event-payload="{{ product | standard_event_data: 'view', context: 'page' | escape }}">
     <div class="page-width">
-      <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
+      <div
+        class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 or personalization_poc_enabled %}grid--2-col-tablet{% else %}product--no-media{% endif %}{% if personalization_poc_enabled %} product--personalization-poc{% endif %}"
+        {% if personalization_poc_enabled %}
+          style="--personalization-preview-x: {{ section.settings.personalization_preview_x }}%; --personalization-preview-y: {{ section.settings.personalization_preview_y }}%; --personalization-preview-width: {{ section.settings.personalization_preview_width }}%;"
+        {% endif %}
+      >
         <div class="grid__item product__media-wrapper">
-          {% render 'product-media-gallery', variant_images: variant_images %}
+          {%- if personalization_poc_enabled -%}
+            <mug-personalization-preview class="personalization-poc__preview" data-letter="A">
+              <img
+                data-personalization-original-mug
+                src="{{ 'personalisation-alphabet-mug.png' | asset_url }}"
+                alt="White alphabet mug with a blue crown and the letter A"
+                width="724"
+                height="824"
+              >
+              <img
+                data-personalization-blank-mug
+                src="{{ 'personalisation-mug-crown.jpg' | asset_url }}"
+                alt="White mug with a blue crown"
+                width="724"
+                height="824"
+              >
+              <span class="personalization-poc__monogram" data-personalization-monogram aria-hidden="true"></span>
+              <div class="personalization-poc__print-area" aria-hidden="true">
+                <span data-personalization-preview dir="auto"></span>
+              </div>
+              <p class="visually-hidden" data-personalization-announcement role="status"></p>
+            </mug-personalization-preview>
+          {%- else -%}
+            {% render 'product-media-gallery', variant_images: variant_images %}
+          {%- endif -%}
         </div>
         <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
           <section
@@ -494,7 +528,8 @@
                     product: product,
                     product_form_id: product_form_id,
                     section_id: section.id,
-                    show_pickup_availability: true
+                    show_pickup_availability: true,
+                    personalization_poc_enabled: personalization_poc_enabled
                   -%}
                 {%- when 'rating' -%}
                   {%- if product.metafields.reviews.rating.value != blank -%}
@@ -2300,6 +2335,40 @@
       "id": "enable_video_looping",
       "default": false,
       "label": "t:sections.main-product.settings.enable_video_looping.label"
+    },
+    {
+      "type": "header",
+      "content": "Local personalization POC"
+    },
+    {
+      "type": "range",
+      "id": "personalization_preview_x",
+      "min": 20,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "Preview horizontal position",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "personalization_preview_y",
+      "min": 20,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "Preview vertical position",
+      "default": 79
+    },
+    {
+      "type": "range",
+      "id": "personalization_preview_width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Preview maximum width",
+      "default": 42
     },
     {
       "type": "header",

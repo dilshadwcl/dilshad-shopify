@@ -6,6 +6,7 @@
   @param {string} product_form_id - The product form's unique ID.
   @param {string} section_id - The section ID used to namespace the form and submit button.
   @param {boolean} [show_pickup_availability] - Whether to render pickup availability. Defaults to `false`.
+  @param {boolean} [personalization_poc_enabled] - Whether to render the local personalization POC inputs.
   @param {object} [section] - The current section context, supplied implicitly when rendered from a section and used for IDs and pickup-availability colors.
 
   @example
@@ -20,7 +21,7 @@
       endif
 
       assign show_dynamic_checkout = false
-      if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
+      if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false and personalization_poc_enabled != true
         assign show_dynamic_checkout = true
       endif
     -%}
@@ -58,6 +59,65 @@
           {% endif %}
           class="product-variant-id"
         >
+
+        {%- if personalization_poc_enabled -%}
+          <div class="personalization-poc">
+            {%- assign alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' | split: '' -%}
+            <fieldset class="product-form__input personalization-poc__letters" data-personalization-letters>
+              <legend class="form__label">Select letter:</legend>
+              <div class="personalization-poc__letter-grid">
+                {%- for letter in alphabet -%}
+                  <div>
+                    <input
+                      class="visually-hidden"
+                      type="radio"
+                      id="PersonalizationLetter-{{ section_id }}-{{ letter }}"
+                      name="properties[Letter]"
+                      value="{{ letter }}"
+                      {% if forloop.first %}checked{% endif %}
+                    >
+                    <label for="PersonalizationLetter-{{ section_id }}-{{ letter }}">{{ letter }}</label>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+
+            <div class="product-form__input">
+              <label class="form__label" for="PersonalizationName-{{ section_id }}">Personalised name</label>
+              <input
+                id="PersonalizationName-{{ section_id }}"
+                class="field__input"
+                type="text"
+                name="properties[Personalised name]"
+                placeholder="e.g. Amanda Matthews"
+                maxlength="30"
+                required
+                aria-describedby="PersonalizationHint-{{ section_id }}"
+                data-personalization-name
+              >
+              <small id="PersonalizationHint-{{ section_id }}">Up to 30 characters. Your name appears on the mug as you type.</small>
+            </div>
+
+            <div class="product-form__input product-form__input--dropdown">
+              <label class="form__label" for="PersonalizationFont-{{ section_id }}">Font style</label>
+              <div class="select">
+                <select
+                  id="PersonalizationFont-{{ section_id }}"
+                  class="select__select"
+                  name="properties[Font]"
+                  data-personalization-font
+                >
+                  <option value="Classic">Classic</option>
+                  <option value="Modern">Modern</option>
+                  <option value="Script">Script</option>
+                </select>
+                <span class="svg-wrapper">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
 
         {%- if gift_card_recipient_feature_active -%}
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}

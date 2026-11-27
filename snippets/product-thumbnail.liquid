@@ -13,6 +13,7 @@
   @param {boolean} [xr_button] - Whether to show the Shopify XR button for 3D models. Defaults to false.
   @param {boolean} [constrain_to_viewport] - Whether to constrain the media height to the viewport. Defaults to false.
   @param {boolean} [lazy_load] - Whether to lazy-load the preview image. Defaults to true.
+  @param {boolean} [personalization_poc_enabled] - Whether to show the local personalization preview overlay.
   @param {object} [section] - The current product section context, supplied implicitly when rendered from that section and used for its image zoom setting.
 
   @example
@@ -82,6 +83,9 @@
           sizes: sizes,
           widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946'
       }}
+      {%- if personalization_poc_enabled and position == 1 and media.media_type == 'image' -%}
+        <span class="personalization-poc__overlay" data-personalization-preview data-font="classic" aria-hidden="true"></span>
+      {%- endif -%}
     </div>
     <button
       class="product__media-toggle quick-add-hidden product__media-zoom-{{ section.settings.image_zoom }}"

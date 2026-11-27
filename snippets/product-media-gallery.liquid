@@ -6,6 +6,7 @@
   @param {object} [section] - The current product section context, supplied implicitly when rendered from that section and used for gallery IDs, behavior, and presentation.
   @param {number} [limit] - The maximum number of media items to render. Defaults to all media.
   @param {model} [first_3d_model] - The first 3D model, used to render the gallery's Shopify XR button.
+  @param {boolean} [personalization_poc_enabled] - Whether to show the local personalization preview overlay.
 
   @example
   {% render 'product-media-gallery', product: product, variant_images: variant_images, first_3d_model: first_3d_model, limit: 1 %}
@@ -81,7 +82,8 @@
             media_width: media_width,
             media_fit: section.settings.media_fit,
             constrain_to_viewport: section.settings.constrain_to_viewport,
-            lazy_load: false
+            lazy_load: false,
+            personalization_poc_enabled: personalization_poc_enabled
           %}
         </li>
       {%- endif -%}
@@ -119,7 +121,8 @@
               media_width: media_width,
               media_fit: section.settings.media_fit,
               constrain_to_viewport: section.settings.constrain_to_viewport,
-              lazy_load: lazy_load
+              lazy_load: lazy_load,
+              personalization_poc_enabled: personalization_poc_enabled
             %}
           </li>
         {%- endunless -%}

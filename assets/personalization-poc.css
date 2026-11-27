@@ -1,0 +1,136 @@
+.product--personalization-poc .product-form__input--pill {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.product--personalization-poc .product-form__input--pill .form__label {
+  flex-basis: 100%;
+}
+
+.product--personalization-poc .product-form__input--pill input[type='radio'] + label {
+  box-sizing: border-box;
+  min-width: 3.2rem;
+  margin: 0;
+  padding: 0.9rem;
+  border-radius: 0;
+}
+
+.personalization-poc {
+  display: block;
+  margin-block: 1.6rem;
+}
+
+.personalization-poc .product-form__input {
+  max-width: 100%;
+}
+
+.personalization-poc__letters {
+  min-inline-size: 0;
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+}
+
+.personalization-poc__letter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 4.4rem);
+  gap: 1rem 1.2rem;
+  margin-block-start: 0.8rem;
+}
+
+.personalization-poc__letter-grid label {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  inline-size: 4.4rem;
+  block-size: 4.4rem;
+  border: 1px solid rgba(var(--color-foreground), 0.65);
+  color: rgb(var(--color-foreground));
+  line-height: 1;
+  cursor: pointer;
+}
+
+.personalization-poc__letter-grid label:hover {
+  background: rgba(var(--color-foreground), 0.08);
+}
+
+.personalization-poc__letter-grid input:checked + label {
+  border-color: rgb(var(--color-foreground));
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}
+
+.personalization-poc__letter-grid input:focus-visible + label {
+  outline: 2px solid rgb(var(--color-foreground));
+  outline-offset: 3px;
+}
+
+.personalization-poc small {
+  display: block;
+  margin-block-start: 0.6rem;
+}
+
+.personalization-poc__preview {
+  position: relative;
+  display: block;
+  container-type: inline-size;
+  max-width: 724px;
+  margin-inline: auto;
+  overflow: hidden;
+  background: #fff;
+}
+
+.personalization-poc__preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.personalization-poc__preview[data-letter='A'] :is([data-personalization-blank-mug], .personalization-poc__monogram),
+.personalization-poc__preview:not([data-letter='A']) [data-personalization-original-mug] {
+  display: none;
+}
+
+.personalization-poc__monogram {
+  position: absolute;
+  top: 63.5%;
+  left: var(--personalization-preview-x, 38%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  color: #1b4072;
+  font: italic 24cqi / 1 Georgia, serif;
+}
+
+.personalization-poc__print-area {
+  position: absolute;
+  top: var(--personalization-preview-y, 79%);
+  left: var(--personalization-preview-x, 38%);
+  width: var(--personalization-preview-width, 42%);
+  display: flex;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  color: #1b4072;
+  font: 4cqi / 1.2 Georgia, serif;
+}
+
+.personalization-poc__print-area span {
+  flex: none;
+  white-space: pre;
+}
+
+.personalization-poc__preview[data-font='Modern'] .personalization-poc__print-area {
+  font-family: Arial, sans-serif;
+}
+
+.personalization-poc__preview[data-font='Script'] .personalization-poc__print-area {
+  font-family: 'Apple Chancery', 'Segoe Script', 'Brush Script MT', cursive;
+  font-style: italic;
+}
+
+@media screen and (max-width: 749px) {
+  .personalization-poc__preview {
+    max-width: 32rem;
+  }
+}
